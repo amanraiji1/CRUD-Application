@@ -2,10 +2,9 @@ import User from "../schema/userSchema.js";
 
 export const addUser = async (request, response) => {
   const user = request.body;
-
-  const newUser = new User(user);
-
   try {
+    const newUser = new User(user);
+
     await newUser.save();
     response.status(201).json(newUser);
   } catch (error) {
@@ -49,5 +48,16 @@ export const deleteUser = async (request, response) => {
     response.status(201).json({ message: "user deleted" });
   } catch (error) {
     response.status(409).json({ message: error.message });
+  }
+};
+
+export const getSearch = async (request, response) => {
+  try {
+    const users = await User.find({
+      phone: request.params.id,
+    });
+    response.status(200).json(users);
+  } catch (error) {
+    response.status(404).json({ message: error.message });
   }
 };
